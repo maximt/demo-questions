@@ -1,7 +1,7 @@
 .PHONY: tests
 
 tests:
-	PYTHONPATH=. pytest tests/
+	docker-compose exec api /bin/bash -c "PYTHONPATH=. pytest tests"
 
 initdb:
 	docker-compose exec api /bin/bash -c "PYTHONPATH=. python app/main.py initdb"
