@@ -1,0 +1,39 @@
+version: '3.9'
+
+
+services:  
+  db:
+    image: postgres:12
+    volumes:
+      - ./data:/var/lib/postgresql/data/pgdata
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    restart: always
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - 8000:8080
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - 8080:80
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+      - ./pgadmin/.pgpass:/pgpass
+    restart: always
+  
